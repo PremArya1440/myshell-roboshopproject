@@ -6,8 +6,11 @@ AMI_ID="ami-0c55b159cbfafe1f0"   #replace with your AMI id
 for instance in $@
 do
 # aws ec2 run-instances --image-id ami-0220d79f3f480ecf5 --instance-type t3.micro --security-group-ids sg-08ccf1ff6b7744e3c --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" 
+
+INSTANCE_ID= 
+
 $(aws ec2 run-instances \
---image-id $AMI_ID \ ami-0220d79f3f480ecf5 
+--image-id $AMI_ID \ 
 --instance-type "t3.micro" \
 --security-group-ids $SG_ID \
 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" \
@@ -15,19 +18,20 @@ $(aws ec2 run-instances \
 --output text )
 
 if [ $instance == "frontend"]; then
-   IP=$(
+   IP=$(   
       aws ec2 describe-instances \
-       --instance-ids $instance_id \
+       --instance-ids $INSTANCE_ID \
        --query 'Reservations[].Instances[].PublicIpAddress' \
         --output text
    )
    else
     IP=$(
         aws ec2 describe-instances \
-         --instance-ids $instance_id \
+         --instance-ids $INSTANCE_ID \
          --query 'Reservations[].Instances[].PublicIpAddress' \
           --output text
     )
     
     fi
+    ECHO "Instance $instance launched with IP: $IP"
 done
