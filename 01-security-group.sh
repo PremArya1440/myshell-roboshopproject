@@ -31,7 +31,7 @@ if [ $instance == "frontend"]; then
          --query 'Reservations[].Instances[].PublicIpAddress' \
           --output text
     )
-    
+
     fi
-    ECHO "Instance $instance launched with IP: $IP"
+    echo "IP Address: $IP"
 done
